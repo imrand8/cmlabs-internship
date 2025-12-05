@@ -1,0 +1,154 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import { useUI } from "@/context/UIContext";
+
+interface Collaborator {
+  id: number;
+  name: string;
+  role: "Owner" | "Collaborator";
+  status: string;
+  action: "Owner" | "Collaborator" | "Pending";
+}
+
+export default function CollaboratorPage() {
+  const { isDark } = useUI();
+  const [q, setQ] = useState("");
+
+  const collaborators: Collaborator[] = [
+    { id: 1, name: "Bilal Al Ihsan", role: "Owner", status: "Active", action: "Owner" },
+    { id: 2, name: "Zheomovin", role: "Collaborator", status: "Active", action: "Collaborator" },
+    { id: 3, name: "Azria", role: "Collaborator", status: "Active", action: "Pending" },
+    { id: 4, name: "Ronaldo", role: "Collaborator", status: "Active", action: "Collaborator" },
+  ];
+
+  const filtered = collaborators.filter((c) =>
+    c.name.toLowerCase().includes(q.trim().toLowerCase())
+  );
+
+  const roleBadge = (role: Collaborator["role"]) =>
+    role === "Owner" ? "bg-blue-500 text-white" : "bg-yellow-500 text-white";
+
+  return (
+    <div className={`${isDark ? "bg-slate-900" : "bg-[#F4F5FA]"} min-h-screen`}>
+      <div className="mx-auto max-w-[1300px] px-6 py-6">
+        
+        {/* Header: Judul + Filter (kiri) dan Add (kanan) */}
+        <div className="flex items-start justify-between mb-5">
+          <div>
+            <h1 className={`text-3xl font-bold mb-4 ${isDark ? "text-slate-100" : "text-slate-900"}`}>
+              Collaborator
+            </h1>
+            <button
+              type="button"
+              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors
+                ${isDark ? "border-slate-600 text-slate-300 hover:bg-slate-700" : "border-slate-300 text-slate-700 hover:bg-slate-50"}`}
+            >
+              <span>Filter Data</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.5a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 3v-6.172a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+              </svg>
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className="inline-flex items-center justify-center rounded-lg bg-[#F59E0B] px-6 py-3 text-white font-semibold shadow-sm hover:bg-[#D97706] transition-colors"
+          >
+            Add Collaborator
+          </button>
+        </div>
+
+        {/* Search */}
+        <div className="mb-5">
+          <div className="relative max-w-4xl">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </span>
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search"
+              className={`w-full rounded-lg pl-10 pr-3 py-2.5 border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500
+                ${isDark ? "bg-slate-800 text-slate-100 border-slate-700 placeholder:text-slate-400" :
+                           "bg-white text-slate-900 border-slate-300 placeholder:text-slate-400"}`}
+            />
+          </div>
+        </div>
+
+        {/* Tabel */}
+        <div className={`rounded-xl overflow-hidden shadow-sm ${isDark ? "bg-slate-800/60 border border-slate-700" : "bg-white border border-slate-200"}`}>
+          <div className={`${isDark ? "bg-slate-700 text-slate-100" : "bg-[#3B82F6] text-white"}`}>
+            <div className="grid grid-cols-4 gap-4">
+              <div className="px-6 py-3.5 text-left text-sm font-semibold">Collaborator Name</div>
+              <div className="px-6 py-3.5 text-left text-sm font-semibold">Status</div>
+              <div className="px-6 py-3.5 text-left text-sm font-semibold">Role</div>
+              <div className="px-6 py-3.5 text-center text-sm font-semibold">Action</div>
+            </div>
+          </div>
+
+          <div>
+            {filtered.length ? (
+              filtered.map((c, idx) => (
+                <div
+                  key={c.id}
+                  className={`grid grid-cols-4 gap-4 items-center ${isDark ? "text-slate-100" : "text-slate-800"}
+                              ${isDark ? (idx % 2 ? "bg-slate-800/40" : "bg-slate-800/70") : (idx % 2 ? "bg-[#FAFAFD]" : "bg-white")}
+                              border-t ${isDark ? "border-slate-700" : "border-slate-200"} hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors`}
+                >
+                  {/* Name + Badge */}
+                  <div className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <span className="font-semibold">{c.name}</span>
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${roleBadge(c.role)}`}>
+                        {c.role}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Status */}
+                  <div className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
+                    {c.status}
+                  </div>
+
+                  {/* Role Info */}
+                  <div className="px-6 py-4 font-medium">
+                    {c.action}
+                  </div>
+
+                  {/* Action */}
+                  <div className="px-6 py-4">
+                    <div className="flex items-center justify-center gap-4">
+                      {c.action === "Pending" ? (
+                        <>
+                          <button className="hover:opacity-80 transition-opacity" title="Approve" aria-label="Approve">
+                            <Image src="/check.png" alt="Approve" width={22} height={22} />
+                          </button>
+                          <button className="hover:opacity-80 transition-opacity" title="Delete" aria-label="Delete">
+                            <Image src="/trash.png" alt="Delete" width={22} height={22} />
+                          </button>
+                        </>
+                      ) : (
+                        <button className="hover:opacity-80 transition-opacity" title="Delete" aria-label="Delete">
+                          <Image src="/trash.png" alt="Delete" width={22} height={22} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className={`py-12 text-center ${isDark ? "text-slate-300" : "text-slate-500"}`}>
+                No collaborators found
+              </div>
+            )}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}
