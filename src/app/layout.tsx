@@ -4,6 +4,8 @@ import "./globals.css";
 import { UIProvider } from "@/context/UIContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 import RootShell from "@/components/RootShell";
+import { Import } from "lucide-react";
+import Header from "@/components/header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

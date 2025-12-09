@@ -12,6 +12,7 @@ interface UIContextProps {
   toggleDark: () => void;
   collapsed: boolean;
   toggleCollapsed: () => void;
+  setCollapsed: (value: boolean) => void;
   secondaryOpen: boolean;
   setSecondaryOpen: (v: boolean) => void;
 }
@@ -69,6 +70,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
 
   const toggleDark = useCallback(() => setIsDark((v) => !v), []);
   const toggleCollapsed = useCallback(() => setCollapsed((v) => !v), []);
+  const setCollapsedValue = useCallback((value: boolean) => setCollapsed(value), []);
 
   return (
     <UIContext.Provider
@@ -77,6 +79,7 @@ export function UIProvider({ children }: { children: React.ReactNode }) {
         toggleDark,
         collapsed,
         toggleCollapsed,
+        setCollapsed: setCollapsedValue,
         secondaryOpen,
         setSecondaryOpen,
       }}

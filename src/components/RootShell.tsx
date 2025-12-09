@@ -15,25 +15,27 @@ function DashboardLayoutWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <div
-      className={`h-screen w-full overflow-hidden flex ${
-        isDark ? "bg-slate-900 text-slate-100" : "bg-slate-100 text-slate-900"
-      }`} /* make parent a flex row so sidebar and content sit side-by-side */
+      /* PERBAIKAN 1: Hapus kelas bg-slate-900/100 dari div akar */
+      className={`h-screen w-full overflow-hidden flex text-slate-900 dark:text-slate-100`}
     >
       {/* SIDEBAR */}
       <DashboardSidebar />
 
-      {/* WRAPPER KANAN: HEADER + MAIN (flex-1 so it fills remaining space, min-w-0 to allow flex shrinking) */}
+      {/* WRAPPER KANAN: HEADER + MAIN */}
       <div className="flex-1 h-screen flex flex-col min-w-0">
-        {/* HEADER: tetap di atas, tanpa background wrapper supaya header sendiri yang menampilkan efek kaca */}
+        
+        {/* HEADER: Dibungkus tanpa background tambahan */}
         <header
           className={`flex items-center transition-all duration-300 ease-in-out w-full flex-shrink-0`}
         >
           <Header />
         </header>
 
-        {/* MAIN CONTENT: scrollable di sini, tanpa ml pl yang membuat celah */}
+        {/* MAIN CONTENT: Tambahkan background ke MAIN (Ini yang membuat kontras) */}
         <main
-          className={`flex-1 overflow-y-auto pb-8 px-6 md:px-10 transition-all duration-300 ease-in-out min-w-0`}
+          className={`flex-1 overflow-y-auto pb-8 px-6 md:px-10 transition-all duration-300 ease-in-out min-w-0
+            ${isDark ? "bg-slate-900" : "bg-slate-100"}
+          `}
         >
           {children}
         </main>

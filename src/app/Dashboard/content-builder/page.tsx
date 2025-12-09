@@ -14,7 +14,7 @@ export default function ContentBuilderPage() {
     >
       <ContentBuilderSidebar />
 
-      <main className="ml-72 min-h-screen px-10 md:px-16 py-12">
+      <main className="ml-72 min-h-screen px-10 md:px-16 py-16 flex items-center justify-center">
         <div className="w-full max-w-5xl bg-[#2563EB] text-white rounded-2xl px-8 md:px-10 py-8 md:py-10 shadow-2xl">
           <h1 className="text-3xl font-bold mb-2">Content Builder</h1>
           <p className="text-lg font-semibold mb-6">Build your first layout.</p>

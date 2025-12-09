@@ -25,6 +25,10 @@ export default function PersonalProjectPage() {
     p.name.toLowerCase().includes(q.trim().toLowerCase())
   );
 
+  // BASE PATH DISESUAIKAN DENGAN LOKASI EDITOR ANDA
+  // Jika page ini berada di /dashboard/personal, maka editornya di:
+  const BASE_PATH = "/Dashboard/personal/create"; 
+
   return (
     <div className={`${isDark ? "bg-slate-900" : "bg-[#F4F5FA]"} min-h-screen`}>
       <div className="mx-auto max-w-[1300px] px-6 py-6" style={{ marginTop: '50px' }}>
@@ -69,7 +73,7 @@ export default function PersonalProjectPage() {
               placeholder="Search"
               className={`w-full rounded-lg pl-10 pr-3 py-2.5 border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500
                 ${isDark ? "bg-slate-800 text-slate-100 border-slate-700 placeholder:text-slate-400" :
-                           "bg-white text-slate-900 border-slate-300 placeholder:text-slate-400"}`}
+                               "bg-white text-slate-900 border-slate-300 placeholder:text-slate-400"}`}
             />
           </div>
         </div>
@@ -106,17 +110,29 @@ export default function PersonalProjectPage() {
                   {/* Actions */}
                   <div className="px-6 py-4">
                     <div className="flex items-center gap-3">
+                      {/* 1. Delete */}
                       <button className="hover:opacity-80 transition-opacity" title="Delete" aria-label="Delete">
-                        <Image src="/trash.png" alt="Delete" width={20} height={20} />
+                        <Image src="/sampah.png" alt="Delete" width={30} height={30} />
                       </button>
-                      <button className="hover:opacity-80 transition-opacity" title="Edit" aria-label="Edit">
-                        <Image src="/edit.png" alt="Edit" width={20} height={20} />
-                      </button>
+                      
+                      {/* 2. EDIT/LINKED: PERBAIKAN LINK DINAMIS */}
+                      <Link 
+                        href={`${BASE_PATH}/${p.id}`} // Contoh: /dashboard/personal/create/2
+                        className="hover:opacity-80 transition-opacity" 
+                        title="Edit" 
+                        aria-label="Edit"
+                      >
+                        <Image src="/linked.png" alt="Edit" width={30} height={30} />
+                      </Link>
+                      
+                      {/* 3. View */}
                       <button className="hover:opacity-80 transition-opacity" title="View" aria-label="View">
-                        <Image src="/eye.png" alt="View" width={20} height={20} />
+                        <Image src="/add.png" alt="View" width={30} height={30} />
                       </button>
+                      
+                      {/* 4. More */}
                       <button className="hover:opacity-80 transition-opacity" title="More" aria-label="More">
-                        <Image src="/more.png" alt="More" width={20} height={20} />
+                        <Image src="/sync.png" alt="More" width={30} height={30} />
                       </button>
                     </div>
                   </div>

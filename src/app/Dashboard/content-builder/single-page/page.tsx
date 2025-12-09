@@ -11,9 +11,10 @@ export default function SinglePageCreate() {
   const { isCollapsed } = useSidebar();
 
   const [activeTab, setActiveTab] = useState<"basic" | "advanced">("basic");
+  // State toggle
   const [multiLang, setMultiLang] = useState(true);
-  const [seo, setSeo] = useState(true);
-  const [workflow, setWorkflow] = useState(false);
+  const [seo, setSeo] = useState(false); // Default false agar terlihat bedanya saat tes
+  const [workflow, setWorkflow] = useState(true);
 
   return (
     <div
@@ -29,7 +30,6 @@ export default function SinglePageCreate() {
           isCollapsed ? "ml-[calc(5rem+16rem)]" : "ml-[calc(18rem+16rem)]"
         }`}
       >
-        {/* Card lebih kecil & fix width */}
         <div className="w-full max-w-3xl rounded-2xl bg-gradient-to-b from-[#1E88E5] to-[#1976D2] shadow-[0_18px_40px_rgba(0,0,0,0.25)] px-8 py-7 text-white">
           <h1 className="text-xl md:text-2xl font-semibold mb-5">
             Create Single Page
@@ -64,7 +64,7 @@ export default function SinglePageCreate() {
             </button>
           </div>
 
-          {/* Area konten tab – tinggi & lebar fix */}
+          {/* Tabs content */}
           <div className="mt-2">
             <div className="relative overflow-hidden min-h-[200px]">
               {activeTab === "basic" && (
@@ -145,7 +145,7 @@ export default function SinglePageCreate() {
   );
 }
 
-/* =============== TOGGLE COMPONENT =============== */
+/* =============== TOGGLE COMPONENT (FIXED) =============== */
 
 type ToggleProps = {
   label: string;
@@ -161,31 +161,44 @@ function AdvancedToggle({
   onChange,
 }: ToggleProps) {
   return (
-    <div className="flex items-start gap-3">
-      {/* Switch */}
+    <div className="flex items-start gap-4">
+      {/* Switch Button */}
       <button
         type="button"
         onClick={() => onChange(!enabled)}
-        className={`relative inline-flex h-7 w-12 rounded-full transition-all duration-200 ${
-          enabled ? "bg-gradient-to-r from-[#1CD97B] to-[#0FBF61]" : "bg-[#E3E7F4]"
+        /* FIX:
+          - h-7 w-14 (28px x 56px)
+          - p-1 (4px padding all around) -> Ini kunci agar simetris
+          - shrink-0 agar bentuk tidak gepeng
+        */
+        className={`relative inline-flex h-7 w-14 shrink-0 items-center rounded-full p-1 transition-colors duration-300 ${
+          enabled
+            ? "bg-gradient-to-r from-[#1CD97B] to-[#0FBF61]"
+            : "bg-[#E3E7F4]"
         }`}
         style={{
           boxShadow: enabled
-            ? "0 5px 12px rgba(15,191,97,0.55)"
-            : "inset 0 2px 4px rgba(0,0,0,0.18)",
+            ? "0 5px 12px rgba(15, 191, 97, 0.55)"
+            : "inset 0 2px 4px rgba(0, 0, 0, 0.1)", // Shadow off diperhalus
         }}
       >
         <span
-          className="absolute top-[3px] h-5 w-5 rounded-full bg-white transition-transform duration-200"
-          style={{
-            transform: enabled ? "translateX(23px)" : "translateX(4px)",
-            boxShadow: "0 3px 6px rgba(0,0,0,0.25)",
-          }}
+          /* FIX:
+            - translate-x-7 (28px). 
+              Lebar total (56) - Padding Kiri (4) - Padding Kanan (4) - Lebar Knob (20) = 28px sisa ruang gerak.
+              Jadi translate-x-7 pas mentok kanan.
+            - Hapus ml-[3px] yang bikin tidak rata.
+          */
+          className={`
+            pointer-events-none h-5 w-5 rounded-full bg-white shadow-[0_2px_4px_rgba(0,0,0,0.2)]
+            transform-gpu transition-transform duration-300 ease-in-out
+            ${enabled ? "translate-x-7" : "translate-x-0"}
+          `}
         />
       </button>
 
-      {/* Text */}
-      <div>
+      {/* Text block */}
+      <div className="min-w-[160px] pt-0.5">
         <p className="font-semibold text-sm mb-1">{label}</p>
         <p className="text-[11px] leading-snug text-white/90">
           {description}

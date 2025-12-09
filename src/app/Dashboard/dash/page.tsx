@@ -10,13 +10,16 @@ import LineChart from "@/components/charts/linechart";
 export default function DashboardPage() {
   const { collapsed } = useUI();
 
-  // Paksa komponen responsive re-measure setelah sidebar animasi
   useEffect(() => {
     const t = setTimeout(() => {
       window.dispatchEvent(new Event("resize"));
-    }, 320); // selaraskan dengan duration-300 pada sidebar
+    }, 320);
     return () => clearTimeout(t);
   }, [collapsed]);
+
+  const glassWrapper =
+    "rounded-2xl border border-white/10 bg-white/5 " +
+    "backdrop-blur-2xl shadow-[0_18px_45px_rgba(15,23,42,0.55)]";
 
   return (
     <div className="w-full p-8 space-y-6 min-w-0">
@@ -46,16 +49,16 @@ export default function DashboardPage() {
 
       {/* Charts Row 1 - Doughnut & Bar */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 w-full min-w-0">
-        <div className="w-full min-w-0 overflow-hidden">
+        <div className={`w-full min-w-0 overflow-hidden ${glassWrapper}`}>
           <DoughnutChart />
         </div>
-        <div className="w-full min-w-0 overflow-hidden">
+        <div className={`w-full min-w-0 overflow-hidden ${glassWrapper}`}>
           <BarChart />
         </div>
       </div>
 
       {/* Charts Row 2 - Line */}
-      <div className="w-full min-w-0 overflow-hidden">
+      <div className={`w-full min-w-0 overflow-hidden ${glassWrapper}`}>
         <LineChart />
       </div>
     </div>

@@ -47,7 +47,7 @@ const NavItem = ({ href, label, icon }: NavItemProps) => {
         "relative overflow-hidden",
         "group flex items-center rounded-xl transition-all duration-200",
         collapsed ? "px-2.5 py-2.5" : "px-4 py-3",
-        collapsed ? "justify-center" : "gap-2",
+        collapsed ? "justify-center" : "gap-1.5",
         isActive
           ? "bg-white/30 text-white"
           : "bg-white/15 text-white hover:bg-white/25 dark:bg-white/10 dark:hover:bg-white/20",
@@ -86,12 +86,19 @@ const NavItem = ({ href, label, icon }: NavItemProps) => {
 
 export default function Sidebar() {
   const { collapsed } = useUI();
+  const pathname = usePathname();
+
+  // Hide logo ketika di path organizational/create dan sub-path-nya
+  const shouldHideLogo = pathname
+    ?.toLowerCase()
+    .startsWith("/dashboard/organizational/create");
 
   return (
     <aside
       className={[
+        // Pastikan sidebar ini Fixed atau Sticky di root layout agar SecondaryNav bisa menempel padanya
         "hidden md:flex md:flex-col sticky top-0 h-screen",
-        "flex-shrink-0",
+        "flex-shrink-0 z-40",
         // Light: gradient biru
         "bg-gradient-to-b from-blue-500 to-blue-600 text-white",
         // Dark: matikan gradient + pakai warna gelap flat
@@ -103,39 +110,44 @@ export default function Sidebar() {
         collapsed ? "w-20" : "w-64",
       ].join(" ")}
     >
-      {/* Logo Section (tanpa tombol garis 3) */}
-      <div
-        className={[
-          // hapus border-b supaya tak ada garis di bawah header logo
-          "flex-shrink-0 transition-all duration-300",
-          collapsed ? "p-4" : "p-6",
-        ].join(" ")}
-      >
+      {/* Logo Section - Hide ketika di path organizational/create */}
+      {!shouldHideLogo && (
         <div
           className={[
-            "flex items-center",
-            collapsed ? "flex-col gap-3" : "gap-2",
+            // Ini adalah area logo di bagian atas
+            "flex-shrink-0 transition-all duration-300",
+            collapsed ? "p-4" : "p-6",
           ].join(" ")}
         >
-          <div className="w-12 h-12 rounded-xl overflow-hidden bg-white/15 flex items-center justify-center flex-shrink-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
-            <Image
-              src="/logo-cms.png"
-              alt="CMS Logo"
-              width={48}
-              height={48}
-              className="object-contain"
-              priority
-            />
+          <div
+            className={[
+              "flex items-center",
+              collapsed ? "flex-col gap-3" : "gap-2",
+            ].join(" ")}
+          >
+            <div className="w-12 h-12 rounded-xl overflow-hidden bg-white/15 flex items-center justify-center flex-shrink-0 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]">
+              <Image
+                src="/logo-cms.png"
+                alt="CMS Logo"
+                width={48}
+                height={48}
+                className="object-contain"
+                priority
+              />
+            </div>
+
+            {!collapsed && (
+              <h1 className="text-3xl font-medium tracking-tight">CMS</h1>
+            )}
           </div>
-
-          {!collapsed && (
-            <h1 className="text-3xl font-medium tracking-tight">CMS</h1>
-          )}
         </div>
-      </div>
+      )}
 
-      {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-3 overflow-y-auto">
+      {/* Navigation - PERBAIKAN: Tambahkan padding atas (pt-20) untuk offset Header */}
+      <nav
+        className="flex-1 p-4 space-y-3 overflow-y-auto"
+        style={{ paddingTop: "80px" }}
+      >
         {/* Dashboard */}
         <NavItem
           href="/Dashboard/dash"

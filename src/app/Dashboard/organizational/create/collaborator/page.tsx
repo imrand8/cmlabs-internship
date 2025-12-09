@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useUI } from "@/context/UIContext";
+import { usePathname } from "next/navigation";
+import SecondaryNav from "@/components/SecondaryNav";
 
 interface Collaborator {
   id: number;
@@ -13,7 +15,16 @@ interface Collaborator {
 }
 
 export default function CollaboratorPage() {
-  const { isDark } = useUI();
+  const { isDark, setCollapsed } = useUI();
+  const pathname = usePathname();
+
+  // LOGIKA UTAMA: FIXED MINIMIZED (true) - Sidebar otomatis collapse saat masuk ke halaman ini
+  useEffect(() => {
+    setCollapsed(true); // Set sidebar ke minimized (collapsed)
+    return () => {
+      setCollapsed(false); // Reset ke MAXIMIZED (expanded) saat keluar dari halaman
+    };
+  }, [setCollapsed, pathname]);
   const [q, setQ] = useState("");
 
   const collaborators: Collaborator[] = [
@@ -32,7 +43,16 @@ export default function CollaboratorPage() {
 
   return (
     <div className={`${isDark ? "bg-slate-900" : "bg-[#F4F5FA]"} min-h-screen`}>
-      <div className="mx-auto max-w-[1300px] px-6 py-6">
+      {/* Secondary bar (Fixed, menempel di left-20) */}
+      <SecondaryNav />
+
+      {/* MAIN CONTENT: Menampilkan Collaborator */}
+      <main
+        className={`min-h-screen flex flex-col justify-center transition-all duration-300 ease-in-out 
+          pl-[21rem] pr-10 // Padding kiri 21rem (5rem + 16rem)
+        `}
+      >
+        <div className="mx-auto w-full max-w-[1300px] pt-20 pb-10">
         
         {/* Header: Judul + Filter (kiri) dan Add (kanan) */}
         <div className="flex items-start justify-between mb-5">
@@ -148,7 +168,8 @@ export default function CollaboratorPage() {
           </div>
         </div>
 
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
